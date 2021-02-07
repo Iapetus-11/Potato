@@ -1,27 +1,24 @@
 import strutils
 import streams
 
-type
-  Buffer* = ref object of streams.Stream
+proc unpack_bool*(s: Stream): bool =
+  return bool(s.readUint8())
 
-proc unpack_bool*(buf: Buffer): bool =
-  return bool(buf.readUint8())
+proc pack_bool*(s: Stream, b: bool) {.discardable.} =
+  s.write(int8(b))
 
-proc pack_bool*(buf: Buffer, b: bool) {.discardable.} =
-  buf.write(int8(b))
+proc unpack_byte*(s: Stream): int =
+  return int(s.readUint8())
 
-proc unpack_byte*(buf: Buffer): int =
-  return int(buf.readUint8())
+proc pack_byte*(s: Stream, b: int) {.discardable.} =
+  s.write(int8(b))
 
-proc pack_byte*(buf: Buffer, b: int) {.discardable.} =
-  buf.write(int8(b))
-
-proc unpack_varint*(buf: Buffer, max_bits: int = 32): int =
+proc unpack_varint*(s: Stream, max_bits: int = 32): int =
   var num: int = 0
   var b: uint
 
   for i in countup(0, 10):
-    b = buf.readUint8()
+    b = s.readUint8()
 
     num = num or int((b and 0x7F) shl (7 * i))
 
@@ -39,7 +36,7 @@ proc unpack_varint*(buf: Buffer, max_bits: int = 32): int =
 
   return num
 
-proc pack_varint*(buf: Buffer, num: int, max_bits: int = 32) {.discardable.} =
+proc pack_varint*(s: Stream, num: int, max_bits: int = 32) {.discardable.} =
   let num_min: int = (-1 shl (max_bits - 1))
   let num_max: int = (1 shl (max_bits - 1))
 
@@ -58,22 +55,22 @@ proc pack_varint*(buf: Buffer, num: int, max_bits: int = 32) {.discardable.} =
     num = num shr 7
 
     if num > 0:
-      buf.write(uint8(b or 0x80))
+      s.write(uint8(b or 0x80))
     else:
-      buf.write(uint8(b or 0))
+      s.write(uint8(b or 0))
 
     if num == 0:
       break
 
-proc unpack_string*(buf: Buffer): string =
-  let length: int = buf.unpack_varint()
+proc unpack_string*(s: Stream): string =
+  let length: int = s.unpack_varint()
   var str: string
 
   for i in countup(0, length):
-    str.add(buf.readChar())
+    str.add(s.readChar())
 
   return str
 
-proc pack_string*(buf: Buffer, str: string) {.discardable.} =
-  buf.pack_varint(len(str))
-  buf.write(str)
+proc pack_string*(s: Stream, str: string) {.discardable.} =
+  s.pack_varint(len(str))
+  s.write(str)

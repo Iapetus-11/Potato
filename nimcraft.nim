@@ -1,6 +1,6 @@
 import streams
 
-import src/je/types/stream_utils
+import src/je/util/stream
 
 var s: StringStream = newStringStream()
 

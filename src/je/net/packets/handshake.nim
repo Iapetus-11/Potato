@@ -1,16 +1,15 @@
-from streams import Stream
-
-from ../../types/packet import Packet
+import ../../types/packet
+import ../../types/buffer
 
 type
   HandshakeHandshake* = ref object of Packet
-    protocol_version*: int16
+    protocol_version*: int
     server_address*: string
-    server_port*: int16
-    next_state*: byte
+    server_port*: int
+    next_state*: int
 
-proc new_HandshakeHandshake(v: int16, s: string, p: int16, n: byte): HandshakeHandshake =
+proc new_HandshakeHandshake(v: int, s: string, p: int, n: int): HandshakeHandshake =
   return HandshakeHandshake(protocol_version: v, server_address: s, server_port: p, next_state: n)
 
-proc unpack_handshake(s: Stream): HandshakeHandshake =
-  return new_HandshakeHandshake()
+proc unpack_handshake(buf: Buffer): HandshakeHandshake =
+  return unpack_varint()

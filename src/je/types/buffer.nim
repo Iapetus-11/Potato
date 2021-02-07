@@ -2,7 +2,7 @@ import strutils
 import streams
 
 type
-  Buffer* = ref object of Stream
+  Buffer* = ref object of streams.Stream
 
 proc unpack_varint(buf: Buffer, max_bits: int = 32): int =
   var num: int = 0

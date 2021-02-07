@@ -11,5 +11,5 @@ type
 proc new_HandshakeHandshake(v: int, s: string, p: int, n: int): HandshakeHandshake =
   return HandshakeHandshake(protocol_version: v, server_address: s, server_port: p, next_state: n)
 
-proc unpack_handshake(buf: Buffer): HandshakeHandshake =
-  return unpack_varint()
+# proc unpack_handshake(buf: Buffer): HandshakeHandshake =
+#   return unpack_varint()

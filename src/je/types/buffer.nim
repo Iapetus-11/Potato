@@ -4,6 +4,18 @@ import streams
 type
   Buffer* = ref object of streams.Stream
 
+proc unpack_bool(buf: Buffer): bool =
+  return bool(buf.readUint8())
+
+proc pack_bool(buf: Buffer, b: bool) {.discardable.} =
+  buf.write(int8(b))
+
+proc unpack_byte(buf: Buffer): int =
+  return int(buf.readUint8())
+
+proc pack_byte(buf: Buffer, b: int) {.discardable.} =
+  buf.write(int8(b))
+
 proc unpack_varint(buf: Buffer, max_bits: int = 32): int =
   var num: int = 0
   var b: uint

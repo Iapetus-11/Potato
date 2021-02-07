@@ -1,10 +1,11 @@
-import src/je/net/packets/handshake
-import src/je/types/buffer
+import streams
 
-echo handshake.HandshakeHandshake
+import src/je/types/stream_utils
 
-var buf = Buffer()
+var s: StringStream = newStringStream()
 
-echo repr(buf)
-buf.pack_varint(123)
-echo repr(buf)
+echo repr(s)
+
+s.pack_varint(123)
+
+echo repr(s)

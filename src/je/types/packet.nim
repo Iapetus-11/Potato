@@ -1,4 +1,4 @@
 
 type
-  Packet* = object
+  Packet* = ref object of RootObj
     id, to: int

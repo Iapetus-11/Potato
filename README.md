@@ -1,2 +1,2 @@
 # NimCraft
-A Nim package for all Minecraft-related things!
+A Nim package for most Minecraft-related things!

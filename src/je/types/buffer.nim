@@ -52,3 +52,12 @@ proc pack_varint(buf: Buffer, num: int, max_bits: int = 32) {.discardable.} =
 
     if num == 0:
       break
+
+proc unpack_string(buf: Buffer): string =
+  let length: int = buf.unpack_varint()
+  var str: string
+
+  for i in countup(0, length):
+    str.add(buf.readChar())
+
+  return str

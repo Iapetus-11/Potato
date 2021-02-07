@@ -4,19 +4,19 @@ import streams
 type
   Buffer* = ref object of streams.Stream
 
-proc unpack_bool(buf: Buffer): bool =
+proc unpack_bool*(buf: Buffer): bool =
   return bool(buf.readUint8())
 
-proc pack_bool(buf: Buffer, b: bool) {.discardable.} =
+proc pack_bool*(buf: Buffer, b: bool) {.discardable.} =
   buf.write(int8(b))
 
-proc unpack_byte(buf: Buffer): int =
+proc unpack_byte*(buf: Buffer): int =
   return int(buf.readUint8())
 
-proc pack_byte(buf: Buffer, b: int) {.discardable.} =
+proc pack_byte*(buf: Buffer, b: int) {.discardable.} =
   buf.write(int8(b))
 
-proc unpack_varint(buf: Buffer, max_bits: int = 32): int =
+proc unpack_varint*(buf: Buffer, max_bits: int = 32): int =
   var num: int = 0
   var b: uint
 
@@ -39,7 +39,7 @@ proc unpack_varint(buf: Buffer, max_bits: int = 32): int =
 
   return num
 
-proc pack_varint(buf: Buffer, num: int, max_bits: int = 32) {.discardable.} =
+proc pack_varint*(buf: Buffer, num: int, max_bits: int = 32) {.discardable.} =
   let num_min: int = (-1 shl (max_bits - 1))
   let num_max: int = (1 shl (max_bits - 1))
 
@@ -65,7 +65,7 @@ proc pack_varint(buf: Buffer, num: int, max_bits: int = 32) {.discardable.} =
     if num == 0:
       break
 
-proc unpack_string(buf: Buffer): string =
+proc unpack_string*(buf: Buffer): string =
   let length: int = buf.unpack_varint()
   var str: string
 
@@ -74,6 +74,6 @@ proc unpack_string(buf: Buffer): string =
 
   return str
 
-proc pack_string(buf: Buffer, str: string) {.discardable.} =
+proc pack_string*(buf: Buffer, str: string) {.discardable.} =
   buf.pack_varint(len(str))
   buf.write(str)

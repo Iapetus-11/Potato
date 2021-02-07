@@ -22,7 +22,33 @@ proc unpack_varint(buf: Buffer, max_bits: int = 32): int =
   let num_min: int = (-1 shl (max_bits - 1))
   let num_max: int = (1 shl (max_bits - 1))
 
-  if not num_min <= num and num <= num_max:
+  if not (num_min <= num and num <= num_max):
     raise newException(ValueError, strutils.format("Value {num} must be within {num_min} and {num_max}."))
 
   return num
+
+proc pack_varint(buf: Buffer, num: int, max_bits: int = 32) {.discardable.} =
+  let num_min: int = (-1 shl (max_bits - 1))
+  let num_max: int = (1 shl (max_bits - 1))
+
+  var num: int
+
+  if not (num_min <= num and num <= num_max):
+    raise newException(ValueError, strutils.format("Value {num} must be within {num_min} and {num_max}."))
+
+  if num < 0:
+    num += 1 + (1 shl 32)
+
+  var b: int
+
+  for i in countup(0, 10):
+    b = num and 0x7F
+    num = num shr 7
+
+    if num > 0:
+      buf.write(uint8(b or 0x80))
+    else:
+      buf.write(uint8(b or 0))
+
+    if num == 0:
+      break

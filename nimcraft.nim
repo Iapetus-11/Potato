@@ -8,4 +8,6 @@ echo repr(s.peekStr(100))
 
 s.pack_byte(123)
 
+s.setPosition(0)
+
 echo repr(s.peekStr(100))

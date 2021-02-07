@@ -1,5 +1,4 @@
 import ../../types/packet
-import ../../types/buffer
 
 type
   HandshakeHandshake* = ref object of Packet

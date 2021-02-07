@@ -4,8 +4,8 @@ import src/je/types/stream_utils
 
 var s: StringStream = newStringStream()
 
-echo repr(s)
+echo repr(s.peekStr(100))
 
 s.pack_varint(123)
 
-echo repr(s)
+echo repr(s.peekStr(100))

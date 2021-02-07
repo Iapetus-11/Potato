@@ -56,8 +56,10 @@ proc pack_varint*(s: Stream, num: int, max_bits: int = 32) {.discardable.} =
 
     if num > 0:
       s.write(uint8(b or 0x80))
+      echo uint8(b or 0x80)
     else:
       s.write(uint8(b or 0))
+      echo uint8(b or 0)
 
     if num == 0:
       break

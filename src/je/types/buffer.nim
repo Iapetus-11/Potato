@@ -61,3 +61,7 @@ proc unpack_string(buf: Buffer): string =
     str.add(buf.readChar())
 
   return str
+
+proc pack_string(buf: Buffer, str: string) {.discardable.} =
+  buf.pack_varint(len(str))
+  buf.write(str)

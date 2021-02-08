@@ -1,13 +1,8 @@
-import streams
+import src/je/util/struct
 
-import src/je/util/stream
+var fmt: array[0..3, char] = ['b', 'B', 'q', 'i']
+var data: array[0..3, int] = [1, 2, 100000, 6969]
 
-var s: StringStream = newStringStream()
+var result: string = pack(fmt, data)
 
-echo repr(s.peekStr(100))
-
-s.pack_byte(123)
-
-s.setPosition(0)
-
-echo repr(s.peekStr(100))
+echo result

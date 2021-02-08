@@ -47,6 +47,22 @@ proc pack(i: uint32, endian: char): uint32 =
   else:
     littleEndian32(addr result, addr i)
 
+proc pack(q: int64, endian: char): int64 =
+  var q: int64 = q
+
+  if endian == '>':
+    bigEndian64(addr result, addr q)
+  else:
+    littleEndian64(addr result, addr q)
+
+proc pack(q: uint64, endian: char): uint64 =
+  var q: uint64 = q
+
+  if endian == '>':
+    bigEndian64(addr result, addr q)
+  else:
+    littleEndian64(addr result, addr q)
+
 proc pack(fmt: seq[char], data: seq[anyStructData]): string =
   if len(fmt) != len(data) + 1:
     raise newException(ValueError, "Data is invalid for format given.")

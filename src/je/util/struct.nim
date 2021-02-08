@@ -1,8 +1,7 @@
 import endians
 import streams
 
-const formatCodes: array[0..10, char] = ['b', 'B', '?', 'h', 'H', 'i', 'I', 'q', 'Q', 'f', 'd']
-const endianCodes: array[0..1, char] = ['>', '<']
+const formatCodes: array[0..9, char] = ['b', 'B', 'h', 'H', 'i', 'I', 'q', 'Q', 'f', 'd']
 
 type
   anyStructData* = int8 | uint8 | bool | int16 | uint16 | int32 | uint32 | int64 | uint64 | float
@@ -64,22 +63,24 @@ proc pack(q: uint64, endian: char): uint64 =
   else:
     littleEndian64(addr result, addr q)
 
-# proc pack(f: float, endian: char): float =
-#   var f: float = f
-#
-#   if endian == '>':
-#     bigEndianFloat
-
-proc pack*(fmt: openArray[char], data: openArray[anyStructData]): string =
+proc pack*(fmt: string, data: openArray[int]): string =
   if len(fmt) != len(data) + 1:
     raise newException(ValueError, "Data is invalid for format given.")
 
-  if not fmt[0] in endianCodes:
+  let endianness: char = fmt[0]
+
+  if endianness != '>' or endianness != '<':
     raise newException(ValueError, "Invalid endianness specified in format.")
 
   var s = StringStream()
 
   for i in countup(0, len(data)):
-    s.write(pack(data[i], fmt[0]))
+    if fmt[i+1] == 'b':
+      s.write(pack(int8(data[i]), endianness))
+    elif fmt[i+1] == 'B':
+      s.write(pack(uint8(data[i]), endianness))
+    elif fmt[i+1] == 'h':
+      s.write(pack(int16(data[i]), endianness))
 
-  return s
+  s.setPosition(0)
+  return s.readAll()

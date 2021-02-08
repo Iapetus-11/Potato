@@ -5,7 +5,7 @@ const formatCodes: array[0..10, char] = ['b', 'B', '?', 'h', 'H', 'i', 'I', 'q',
 const endianCodes: array[0..1, char] = ['>', '<']
 
 type
-  anyStructData = int8 | uint8 | bool | int16 | uint16 | int32 | uint32 | int64 | uint64 | float
+  anyStructData* = int8 | uint8 | bool | int16 | uint16 | int32 | uint32 | int64 | uint64 | float
 
 proc pack(b: int8, endian: char): int8 =  # endianness doesn't matter here since it's just one byte
   return b

@@ -70,7 +70,7 @@ proc pack(q: uint64, endian: char): uint64 =
 #   if endian == '>':
 #     bigEndianFloat
 
-proc pack(fmt: seq[char], data: seq[anyStructData]): string =
+proc pack*(fmt: openArray[char], data: openArray[anyStructData]): string =
   if len(fmt) != len(data) + 1:
     raise newException(ValueError, "Data is invalid for format given.")
 

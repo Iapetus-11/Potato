@@ -4,7 +4,7 @@ import streams
 const
   formatCodes: array[0..9, char] = ['b', 'B', 'h', 'H', 'i', 'I', 'q', 'Q', 'f', 'd']
 
-proc pack(h: int16, endian: char): int16 =
+proc endianize(h: int16, endian: char): int16 =
   var h: int16 = h
 
   if endian == '>':
@@ -12,7 +12,7 @@ proc pack(h: int16, endian: char): int16 =
   else:
     littleEndian16(addr result, addr h)
 
-proc pack(h: uint16, endian: char): uint16 =
+proc endianize(h: uint16, endian: char): uint16 =
   var h: uint16 = h
 
   if endian == '>':
@@ -20,7 +20,7 @@ proc pack(h: uint16, endian: char): uint16 =
   else:
     littleEndian16(addr result, addr h)
 
-proc pack(i: int32, endian: char): int32 =
+proc endianize(i: int32, endian: char): int32 =
   var i: int32 = i
 
   if endian == '>':
@@ -28,7 +28,7 @@ proc pack(i: int32, endian: char): int32 =
   else:
     littleEndian32(addr result, addr i)
 
-proc pack(i: uint32, endian: char): uint32 =
+proc endianize(i: uint32, endian: char): uint32 =
   var i: uint32 = i
 
   if endian == '>':
@@ -36,7 +36,7 @@ proc pack(i: uint32, endian: char): uint32 =
   else:
     littleEndian32(addr result, addr i)
 
-proc pack(q: int64, endian: char): int64 =
+proc endianize(q: int64, endian: char): int64 =
   var q: int64 = q
 
   if endian == '>':
@@ -44,7 +44,7 @@ proc pack(q: int64, endian: char): int64 =
   else:
     littleEndian64(addr result, addr q)
 
-proc pack(q: uint64, endian: char): uint64 =
+proc endianize(q: uint64, endian: char): uint64 =
   var q: uint64 = q
 
   if endian == '>':
@@ -71,17 +71,17 @@ proc pack*(fmt: string, data: openArray[int]): string =
     elif fmt[i+1] == '?':
       s.write(bool(data[i]))
     elif fmt[i+1] == 'h':
-      s.write(pack(int16(data[i]), endianness))
+      s.write(endianize(int16(data[i]), endianness))
     elif fmt[i+1] == 'H':
-      s.write(pack(uint16(data[i]), endianness))
+      s.write(endianize(uint16(data[i]), endianness))
     elif fmt[i+1] == 'i':
-      s.write(pack(int32(data[i]), endianness))
+      s.write(endianize(int32(data[i]), endianness))
     elif fmt[i+1] == 'I':
-      s.write(pack(uint32(data[i]), endianness))
+      s.write(endianize(uint32(data[i]), endianness))
     elif fmt[i+1] == 'q':
-      s.write(pack(int64(data[i]), endianness))
+      s.write(endianize(int64(data[i]), endianness))
     elif fmt[i+1] == 'Q':
-      s.write(pack(uint64(data[i]), endianness))
+      s.write(endianize(uint64(data[i]), endianness))
     elif fmt[i+1] == 'f':
       s.write((float32(data[i])))
     elif fmt[i+1] == 'd':
@@ -109,17 +109,17 @@ proc pack*(s: Stream, fmt: string, data: openArray[int]) {.discardable.} =
     elif fmt[i+1] == '?':
       s.write(bool(data[i]))
     elif fmt[i+1] == 'h':
-      s.write(pack(int16(data[i]), endianness))
+      s.write(endianize(int16(data[i]), endianness))
     elif fmt[i+1] == 'H':
-      s.write(pack(uint16(data[i]), endianness))
+      s.write(endianize(uint16(data[i]), endianness))
     elif fmt[i+1] == 'i':
-      s.write(pack(int32(data[i]), endianness))
+      s.write(endianize(int32(data[i]), endianness))
     elif fmt[i+1] == 'I':
-      s.write(pack(uint32(data[i]), endianness))
+      s.write(endianize(uint32(data[i]), endianness))
     elif fmt[i+1] == 'q':
-      s.write(pack(int64(data[i]), endianness))
+      s.write(endianize(int64(data[i]), endianness))
     elif fmt[i+1] == 'Q':
-      s.write(pack(uint64(data[i]), endianness))
+      s.write(endianize(uint64(data[i]), endianness))
     elif fmt[i+1] == 'f':
       s.write((float32(data[i])))
     elif fmt[i+1] == 'd':

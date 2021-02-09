@@ -89,8 +89,8 @@ proc pack*(s: Stream, endianness: char = '>', fmt: char, data: structData, ignor
     s.write((float32(data)))
   elif fmt == 'd':
     s.write((float64(data)))
-
-  raise newException(ValueError, "Invalid format: " & fmt)
+  else:
+    raise newException(ValueError, "Invalid format: " & fmt)
 
 proc unpackBool*(s: Stream, endianness: char = '>'): bool =
   return bool(s.readInt8())

@@ -1,6 +1,5 @@
 import endians
 import streams
-import tables
 
 const
   formatCodes: array[0..9, char] = ['b', 'B', 'h', 'H', 'i', 'I', 'q', 'Q', 'f', 'd']

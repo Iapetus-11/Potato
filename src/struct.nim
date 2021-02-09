@@ -101,32 +101,32 @@ proc pack*(s: Stream, endianness: char = '>', fmt: char, data: structData, write
 proc unpackBool*(s: Stream, endianness: char = '>'): bool =
   return bool(s.readInt8())
 
-proc unpackInt8*(s: Stream, endianness: char = '>'): int8 =
+proc unpackByte*(s: Stream, endianness: char = '>'): int8 =
   return s.readInt8()
 
-proc unpackUint8*(s: Stream, endianness: char = '>'): uint8 =
+proc unpackUByte*(s: Stream, endianness: char = '>'): uint8 =
   return s.readUint8()
 
-proc unpackInt16*(s: Stream, endianness: char = '>'): int16 =
+proc unpackShort*(s: Stream, endianness: char = '>'): int16 =
   return endianize(s.readInt16(), endianness)
 
-proc unpackUint16*(s: Stream, endianness: char = '>'): uint16 =
+proc unpackUShort*(s: Stream, endianness: char = '>'): uint16 =
   return endianize(s.readUint16(), endianness)
 
-proc unpackInt32*(s: Stream, endianness: char = '>'): int32 =
+proc unpackInt*(s: Stream, endianness: char = '>'): int32 =
   return endianize(s.readInt32(), endianness)
 
-proc unpackUint32*(s: Stream, endianness: char = '>'): uint32 =
+proc unpackUInt*(s: Stream, endianness: char = '>'): uint32 =
   return endianize(s.readUint32(), endianness)
 
-proc unpackInt64*(s: Stream, endianness: char = '>'): int64 =
+proc unpackLong*(s: Stream, endianness: char = '>'): int64 =
   return endianize(s.readInt64(), endianness)
 
-proc unpackUint64*(s: Stream, endianness: char = '>'): uint64 =
+proc unpackULong*(s: Stream, endianness: char = '>'): uint64 =
   return endianize(s.readUint64(), endianness)
 
-proc unpackFloat32*(s: Stream, endianness: char = '>'): float32 =
+proc unpackFloat*(s: Stream, endianness: char = '>'): float32 =
   return s.readFloat32()
 
-proc unpackFloat64*(s: Stream, endianness: char = '>'): float64 =
+proc unpackDouble*(s: Stream, endianness: char = '>'): float64 =
   return s.readFloat64()

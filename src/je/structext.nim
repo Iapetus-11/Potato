@@ -59,7 +59,6 @@ proc packString(s: Stream, text: string) =
 
 proc unpackString(s: Stream): string =
   let length: int = unpackVarInt(s)
-  var str: string
 
   for _ in countup(0, length):
-    str &= s.readChar()
+    result &= s.readChar()

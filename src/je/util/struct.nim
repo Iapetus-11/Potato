@@ -86,6 +86,8 @@ proc pack*(s: Stream, fmt: string, data: openArray[int]) {.discardable.} =
       s.write((float32(data[i])))
     elif fmt[i+1] == 'd':
       s.write((float64(data[i])))
+    else:
+      raise newException(ValueError, "Invalid format: " & fmt[i+1])
 
   s.setPosition(originalPos)
 
@@ -119,3 +121,5 @@ proc pack*(s: Stream, fmt: string, data: int) {.discardable.} =
     s.write((float32(data)))
   elif fmt[1] == 'd':
     s.write((float64(data)))
+  else:
+    raise newException(ValueError, "Invalid format: " & fmt[1])

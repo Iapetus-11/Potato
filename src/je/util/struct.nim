@@ -87,9 +87,9 @@ proc pack*(fmt: string, data: openArray[int]): string =
     elif fmt[i+1] == 'Q':
       s.write(pack(uint64(data[i]), endianness))
     elif fmt[i+1] == 'f':
-      s.write((float(data[i])))
+      s.write((float32(data[i])))
     elif fmt[i+1] == 'd':
-      s.write((float(data[i])))
+      s.write((float64(data[i])))
 
   s.setPosition(0)
   return s.readAll()

@@ -62,3 +62,5 @@ proc unpackString(s: Stream): string =
 
   for _ in countup(0, length):
     result &= s.readChar()
+
+  result = encodings.convert(result, encodings.getCurrentEncoding(), "UTF-8")

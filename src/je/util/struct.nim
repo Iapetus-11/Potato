@@ -72,9 +72,9 @@ proc pack*(fmt: string, data: openArray[int]): string =
   if endianness != '>' and endianness != '<':
     raise newException(ValueError, "Invalid endianness specified in format.")
 
-  var s = StringStream()
+  var s = newStringStream()
 
-  for i in countup(0, len(data)):
+  for i in countup(0, len(data)-1):
     if fmt[i+1] == 'b':
       s.write(pack(int8(data[i]), endianness))
     elif fmt[i+1] == 'B':

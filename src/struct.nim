@@ -55,15 +55,21 @@ proc endianize(q: uint64, endian: char): uint64 =
   else:
     littleEndian64(addr result, addr q)
 
-proc pack*(s: Stream, endianness: char = '>', fmt: char, data: structData, ignorePos: bool = true) {.discardable.} =
+proc resetPos(s: Stream, pos: int) =
+  if pos != -1:
+    s.setPosition(pos)
+
+proc pack*(s: Stream, endianness: char = '>', fmt: char, data: structData, writeToEnd: bool = true): void {.discardable.} =
   if endianness != '>' and endianness != '<':
     raise newException(ValueError, "Invalid endianness: " & endianness)
 
-  if ignorePos:
-    let originalPos: int = s.getPosition()
+  var resetPosTo: int = -1
+
+  if writeToEnd:
+    resetPosTo = s.getPosition()
     s.setPosition(len(s.readAll()))
 
-    defer: s.setPosition(originalPos)
+  defer: resetPos(s, resetPosTo)
 
   if fmt == '?':
     s.write(bool(data))

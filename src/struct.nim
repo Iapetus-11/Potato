@@ -55,7 +55,7 @@ proc endianize(q: uint64, endian: char): uint64 =
   else:
     littleEndian64(addr result, addr q)
 
-proc pack*(s: Stream, endianness: char, fmt: char, data: structData, ignorePos: bool = true) {.discardable.} =
+proc pack*(s: Stream, endianness: char = '>', fmt: char, data: structData, ignorePos: bool = true) {.discardable.} =
   if endianness != '>' and endianness != '<':
     raise newException(ValueError, "Invalid endianness: " & endianness)
 
@@ -90,31 +90,10 @@ proc pack*(s: Stream, endianness: char, fmt: char, data: structData, ignorePos: 
 
   raise newException(ValueError, "Invalid format: " & fmt)
 
-proc unpack*(s: Stream, endianness: char, fmt: char, to: ptr) {.discardable.} =
-  if endianness != '>' and endianness != '<':
-    raise newException(ValueError, "Invalid endianness: " & endianness)
+proc unpackInt8*(s: Stream, endianness: char = '>'): int8 =
+  return int8(s.readInt8())
 
-  if fmt == 'b':
-    to[] = int8(s.readInt8())
-  elif fmt == 'B':
-    to[] = uint8(s.readUint8())
-  elif fmt == '?':
-    to[] = bool(s.readInt8())
-  elif fmt == 'h':
-    to[] = endianize(int16(s.readInt16()), endianness)
-  elif fmt == 'H':
-    to[] = endianize(uint16(s.readUint16()), endianness)
-  elif fmt == 'i':
-    to[] = endianize(int32(s.readInt32()), endianness)
-  elif fmt == 'I':
-    to[] = endianize(uint32(s.readUint32()), endianness)
-  elif fmt == 'q':
-    to[] = endianize(int64(s.readInt64()), endianness)
-  elif fmt == 'Q':
-    to[] = endianize(uint64(s.readUint64()), endianness)
-  elif fmt == 'f':
-    to[] = float32(s.readFloat32())
-  elif fmt == 'd':
-    to[] = float64(s.readFloat64())
+proc unpackUint8*(s: Stream, endianness: char = '>'): uint8 =
+  return uint8(s.readUint8())
 
-  raise newException(ValueError, "Invalid format: " & fmt)
+proc

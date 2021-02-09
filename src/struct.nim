@@ -5,7 +5,7 @@ import streams
 #   formatCodes: array[0..9, char] = ['b', 'B', 'h', 'H', 'i', 'I', 'q', 'Q', 'f', 'd']
 
 type
-  structData* = bool | int8 | uint8 | int16 | uint16 | int32 | uint32 | int64 | uint64 | float32 | float64
+  structData* = bool | int | float | int8 | uint8 | int16 | uint16 | int32 | uint32 | int64 | uint64 | float32 | float64
 
 proc endianize(h: int16, endian: char): int16 =
   var h: int16 = h

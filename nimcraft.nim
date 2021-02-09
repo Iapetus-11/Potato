@@ -11,7 +11,7 @@ struct.pack(s, '>', 'q', 100000000)
 
 echo s.getPosition()
 
-echo struct.unpackUint8(s)
-echo struct.unpackInt32(s, '<')
-echo struct.unpackFloat32(s)
-echo struct.unpackInt64(s)
+echo struct.unpackUByte(s)
+echo struct.unpackInt(s, '<')
+echo struct.unpackFloat(s)
+echo struct.unpackLong(s)

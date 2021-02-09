@@ -55,38 +55,36 @@ proc endianize(q: uint64, endian: char): uint64 =
   else:
     littleEndian64(addr result, addr q)
 
-proc pack*(s: Stream, fmt: string, data: structData) {.discardable.} =
-  let endianness: char = fmt[0]
-
+proc pack*(s: Stream, endianness: char, fmt: char, data: structData) {.discardable.} =
   if endianness != '>' and endianness != '<':
-    raise newException(ValueError, "Invalid endianness specified in format.")
+    raise newException(ValueError, "Invalid endianness: " & endianness)
 
   let originalPos: int = s.getPosition()
   s.setPosition(len(s.readAll()))
 
-  if fmt[1] == 'b':
+  if fmt == 'b':
     s.write(int8(data))
-  elif fmt[1] == 'B':
+  elif fmt == 'B':
     s.write(uint8(data))
-  elif fmt[1] == '?':
+  elif fmt == '?':
     s.write(bool(data))
-  elif fmt[1] == 'h':
+  elif fmt == 'h':
     s.write(endianize(int16(data), endianness))
-  elif fmt[1] == 'H':
+  elif fmt == 'H':
     s.write(endianize(uint16(data), endianness))
-  elif fmt[1] == 'i':
+  elif fmt == 'i':
     s.write(endianize(int32(data), endianness))
-  elif fmt[1] == 'I':
+  elif fmt == 'I':
     s.write(endianize(uint32(data), endianness))
-  elif fmt[1] == 'q':
+  elif fmt == 'q':
     s.write(endianize(int64(data), endianness))
-  elif fmt[1] == 'Q':
+  elif fmt == 'Q':
     s.write(endianize(uint64(data), endianness))
-  elif fmt[1] == 'f':
+  elif fmt == 'f':
     s.write((float32(data)))
-  elif fmt[1] == 'd':
+  elif fmt == 'd':
     s.write((float64(data)))
   else:
-    raise newException(ValueError, "Invalid format: " & fmt[1])
+    raise newException(ValueError, "Invalid format: " & fmt)
 
   s.setPosition(originalPos)

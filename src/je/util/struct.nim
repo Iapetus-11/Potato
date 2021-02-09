@@ -69,7 +69,7 @@ proc pack*(fmt: string, data: openArray[int]): string =
 
   let endianness: char = fmt[0]
 
-  if endianness != '>' or endianness != '<':
+  if endianness != '>' and endianness != '<':
     raise newException(ValueError, "Invalid endianness specified in format.")
 
   var s = StringStream()

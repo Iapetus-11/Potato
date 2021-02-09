@@ -1,4 +1,4 @@
-from streams import Stream
+from streams import Stream, write
 import encodings
 import strutils
 
@@ -54,4 +54,5 @@ proc unpackVarInt(s: Stream, maxBits: int = 32): int =
 proc packString(s: Stream, text: string) =
   let text: string = encodings.convert(text, "UTF-8", encodings.getCurrentEncoding())
   packVarInt(s, len(text))
-  s.write(text)
+
+  s.write("a")

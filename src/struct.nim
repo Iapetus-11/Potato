@@ -91,9 +91,31 @@ proc pack*(s: Stream, endianness: char = '>', fmt: char, data: structData, ignor
   raise newException(ValueError, "Invalid format: " & fmt)
 
 proc unpackInt8*(s: Stream, endianness: char = '>'): int8 =
-  return int8(s.readInt8())
+  return s.readInt8()
 
 proc unpackUint8*(s: Stream, endianness: char = '>'): uint8 =
-  return uint8(s.readUint8())
+  return s.readUint8()
 
-proc
+proc unpackInt16*(s: Stream, endianness: char = '>'): int16 =
+  return endianize(s.readInt16(), endianness)
+
+proc unpackUint16*(s: Stream, endianness: char = '>'): uint16 =
+  return endianize(s.readUint16(), endianness)
+
+proc unpackInt32*(s: Stream, endianness: char = '>'): int32 =
+  return endianize(s.readInt32(), endianness)
+
+proc unpackUint32*(s: Stream, endianness: char = '>'): uint32 =
+  return endianize(s.readUint32(), endianness)
+
+proc unpackInt64*(s: Stream, endianness: char = '>'): int64 =
+  return endianize(s.readInt64(), endianness)
+
+proc unpackUint64*(s: Stream, endianness: char = '>'): uint64 =
+  return endianize(s.readUint64(), endianness)
+
+proc unpackFloat32*(s: Stream, endianness: char = '>'): float32 =
+  return s.readFloat32()
+
+proc unpackFloat64*(s: Stream, endianness: char = '>'): float64 =
+  return s.readFloat64()

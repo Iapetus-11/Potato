@@ -123,3 +123,5 @@ proc pack*(s: Stream, fmt: string, data: int) {.discardable.} =
     s.write((float64(data)))
   else:
     raise newException(ValueError, "Invalid format: " & fmt[1])
+
+  s.setPosition(originalPos)

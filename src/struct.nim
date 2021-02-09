@@ -55,7 +55,7 @@ proc endianize(q: uint64, endian: char): uint64 =
   else:
     littleEndian64(addr result, addr q)
 
-proc pack*(s: Stream, fmt: string, data: openArray[int]) {.discardable.} =
+proc pack*(s: Stream, fmt: string, data: openArray[structData]) {.discardable.} =
   if len(fmt) != len(data) + 1:
     raise newException(ValueError, "Data is invalid for format given.")
 
@@ -94,7 +94,7 @@ proc pack*(s: Stream, fmt: string, data: openArray[int]) {.discardable.} =
 
   s.setPosition(originalPos)
 
-proc pack*(s: Stream, fmt: string, data: int) {.discardable.} =
+proc pack*(s: Stream, fmt: string, data: structData) {.discardable.} =
   let endianness: char = fmt[0]
 
   if endianness != '>' and endianness != '<':

@@ -59,10 +59,10 @@ proc pack*(s: Stream, endianness: char, fmt: char, data: structData) {.discardab
   if endianness != '>' and endianness != '<':
     raise newException(ValueError, "Invalid endianness: " & endianness)
 
-  let originalPos: int = s.getPosition()
-  s.setPosition(len(s.readAll()))
-
-  defer: s.setPosition(originalPos)
+  # let originalPos: int = s.getPosition()
+  # s.setPosition(len(s.readAll()))
+  #
+  # defer: s.setPosition(originalPos)
 
   if fmt == 'b':
     s.write(int8(data))

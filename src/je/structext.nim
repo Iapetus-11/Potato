@@ -1,9 +1,10 @@
+from streams import Stream
+import encodings
 import strutils
-import streams
 
 import ../struct
 
-proc packVarInt(s: Stream, num: int, maxBits: int = 32): string =
+proc packVarInt(s: Stream, num: int, maxBits: int = 32) =
   let numMin = (-1 shl (maxBits - 1))
   let numMax = (1 shl (maxBits - 1))
 
@@ -49,3 +50,8 @@ proc unpackVarInt(s: Stream, maxBits: int = 32): int =
     raise newException(ValueError, strutils.format("Number {num} doesn't fit within {numMin} and {numMax}"))
 
   return num
+
+proc packString(s: Stream, text: string) =
+  let text: string = encodings.convert(text, "UTF-8", encodings.getCurrentEncoding())
+  packVarInt(s, len(text))
+  s.write(text)

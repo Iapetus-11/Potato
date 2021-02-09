@@ -1,5 +1,6 @@
 import streams
 
+import src/je/structext
 import src/struct
 
 var s: Stream = newStringStream()

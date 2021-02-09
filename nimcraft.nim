@@ -3,8 +3,12 @@ import streams
 import src/struct
 
 var s: Stream = newStringStream()
-var data: array[0..6, int] = [1, 2, 100000, 6969, 69, 420, 7]
 
-struct.pack(s, ">i?iIbBf", data)
+struct.pack(s, ">?", true)
+struct.pack(s, ">q", 123)
+struct.pack(s, ">f", 12.1)
+struct.pack(s, ">b", 69)
+struct.pack(s, "<q", 123)
+struct.pack(s, ">b", 69)
 
 echo repr(s.readAll())

@@ -1,8 +1,8 @@
 import endians
 import streams
 
-const
-  formatCodes: array[0..9, char] = ['b', 'B', 'h', 'H', 'i', 'I', 'q', 'Q', 'f', 'd']
+# const
+#   formatCodes: array[0..9, char] = ['b', 'B', 'h', 'H', 'i', 'I', 'q', 'Q', 'f', 'd']
 
 proc endianize(h: int16, endian: char): int16 =
   var h: int16 = h

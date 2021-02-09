@@ -62,6 +62,8 @@ proc pack*(s: Stream, endianness: char, fmt: char, data: structData) {.discardab
   let originalPos: int = s.getPosition()
   s.setPosition(len(s.readAll()))
 
+  defer: s.setPosition(originalPos)
+
   if fmt == 'b':
     s.write(int8(data))
   elif fmt == 'B':
@@ -84,7 +86,5 @@ proc pack*(s: Stream, endianness: char, fmt: char, data: structData) {.discardab
     s.write((float32(data)))
   elif fmt == 'd':
     s.write((float64(data)))
-  else:
-    raise newException(ValueError, "Invalid format: " & fmt)
 
-  s.setPosition(originalPos)
+  raise newException(ValueError, "Invalid format: " & fmt)

@@ -62,6 +62,7 @@ proc pack*(s: Stream, fmt: string, data: structData) {.discardable.} =
     raise newException(ValueError, "Invalid endianness specified in format.")
 
   let originalPos: int = s.getPosition()
+  s.setPosition(len(s.readAll()))
 
   if fmt[1] == 'b':
     s.write(int8(data))

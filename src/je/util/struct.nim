@@ -1,19 +1,12 @@
 import endians
 import streams
+import tables
 
-const formatCodes: array[0..9, char] = ['b', 'B', 'h', 'H', 'i', 'I', 'q', 'Q', 'f', 'd']
+const
+  formatCodes: array[0..9, char] = ['b', 'B', 'h', 'H', 'i', 'I', 'q', 'Q', 'f', 'd']
 
 type
   anyStructData* = int8 | uint8 | bool | int16 | uint16 | int32 | uint32 | int64 | uint64 | float
-
-proc pack(b: int8, endian: char): int8 =  # endianness doesn't matter here since it's just one byte
-  return b
-
-proc pack(b: uint8, endian: char): uint8 = # endianness again doesn't matter here since it's just one byte
-  return b
-
-proc pack(b: bool, endian: char): bool = # big woop endianness doesn't matter bc bool is just one byte
-  return b
 
 proc pack(h: int16, endian: char): int16 =
   var h: int16 = h
@@ -76,11 +69,27 @@ proc pack*(fmt: string, data: openArray[int]): string =
 
   for i in countup(0, len(data)-1):
     if fmt[i+1] == 'b':
-      s.write(pack(int8(data[i]), endianness))
+      s.write(int8(data[i]))
     elif fmt[i+1] == 'B':
-      s.write(pack(uint8(data[i]), endianness))
+      s.write(uint8(data[i]))
+    elif fmt[i+1] == '?':
+      s.write(bool(data[i]))
     elif fmt[i+1] == 'h':
       s.write(pack(int16(data[i]), endianness))
+    elif fmt[i+1] == 'H':
+      s.write(pack(uint16(data[i]), endianness))
+    elif fmt[i+1] == 'i':
+      s.write(pack(int32(data[i]), endianness))
+    elif fmt[i+1] == 'I':
+      s.write(pack(uint32(data[i]), endianness))
+    elif fmt[i+1] == 'q':
+      s.write(pack(int64(data[i]), endianness))
+    elif fmt[i+1] == 'Q':
+      s.write(pack(uint64(data[i]), endianness))
+    elif fmt[i+1] == 'f':
+      s.write((float(data[i])))
+    elif fmt[i+1] == 'd':
+      s.write((float(data[i])))
 
   s.setPosition(0)
   return s.readAll()

@@ -1,4 +1,4 @@
-from streams import Stream, write
+from streams import Stream, write, readChar
 import encodings
 import strutils
 
@@ -56,3 +56,10 @@ proc packString(s: Stream, text: string) =
 
   packVarInt(s, len(text))
   s.write(text)
+
+proc unpackString(s: Stream): string =
+  let length: int = unpackVarInt(s)
+  var str: string
+
+  for _ in countup(0, length):
+    str &= s.readChar()

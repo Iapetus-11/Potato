@@ -65,7 +65,9 @@ proc pack*(s: Stream, endianness: char = '>', fmt: char, data: structData, ignor
 
     defer: s.setPosition(originalPos)
 
-  if fmt == 'b':
+  if fmt == '?':
+    s.write(bool(data))
+  elif fmt == 'b':
     s.write(int8(data))
   elif fmt == 'B':
     s.write(uint8(data))
@@ -89,6 +91,9 @@ proc pack*(s: Stream, endianness: char = '>', fmt: char, data: structData, ignor
     s.write((float64(data)))
 
   raise newException(ValueError, "Invalid format: " & fmt)
+
+proc unpackBool*(s: Stream, endianness: char = '>'): bool =
+  return bool(s.readInt8())
 
 proc unpackInt8*(s: Stream, endianness: char = '>'): int8 =
   return s.readInt8()

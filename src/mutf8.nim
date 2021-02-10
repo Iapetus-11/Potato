@@ -52,3 +52,27 @@ proc decodeMUTF8*(s: string): string =
       i += 3
 
     result &= char(x)
+
+proc encodeMUTF8*(s: string): string =
+  var c: int
+
+  for chr in s:
+    c = ord(chr)
+
+    if c == 0x00:  # null byte
+      result &= char(0xC0) & char(0x80)
+    elif c <= 0x7F:  # ASCII
+      result &= char(c)
+    elif c <= 0x7FF:  # 2 byte codepoint
+      result &= char(0xC0 or (0x1F and (c shr 0x06))) & char(0x80 or (0x3F and c))
+    elif c <= 0xFFFF:  # 3 byte codepoint
+      result &= char(0xE0 or (0x0F and (c shr 0x0C))) & char(0x80 or (0x3F and (c shr 0x06))) & char(0x80 or (0x3F and c))
+    else:  # should be 6 byte codepoint
+      result &= (
+        char(0xED) &
+        char(0xA0 or ((c shr 0x10) and 0x0F)) &
+        char(0x80 or ((c shr 0x0A) and 0x3f)) &
+        char(0xED) &
+        char(0xb0 or ((c shr 0x06) and 0x0f)) &
+        char(0x80 or (c and 0x3f))
+      )

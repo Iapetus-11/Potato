@@ -4,7 +4,7 @@ import ../../struct
 
 type
   TAG = ref object of RootObj
-    id: int
+    id: int8
     name: string
 
   TAG_End = ref object of TAG
@@ -47,7 +47,7 @@ type
     data: seq[int64]
 
 proc packID(s: Stream, t: TAG) =
-  s.pack(t.id)
+  struct.packByte(s, t.id)
 
 proc unpackID(s: Stream): int8 =
-  return s.unpackByte()
+  return struct.unpackByte(s)

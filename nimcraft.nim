@@ -1,7 +1,9 @@
 import streams
 
+import src/je/types/nbt
 import src/je/structext
 import src/struct
+import src/mutf8
 
 var s: Stream = newStringStream()
 

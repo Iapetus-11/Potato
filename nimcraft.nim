@@ -6,7 +6,7 @@ import src/struct
 import src/mutf8
 
 # Test MUTF8 utils
-let myString: string = "Hello World"
+let myString: string = "Hello WorldȀȀ∃𠀋"
 echo mutf8.encodeMUTF8(myString)
 echo mutf8.decodeMUTF8(mutf8.encodeMUTF8(myString))
 

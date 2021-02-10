@@ -1,6 +1,7 @@
 from streams import Stream, write, readChar
 import encodings
 import strutils
+import json
 
 import ../struct
 
@@ -64,3 +65,9 @@ proc unpackString(s: Stream): string =
     result &= s.readChar()
 
   result = encodings.convert(result, encodings.getCurrentEncoding(), "UTF-8")
+
+proc packJSON(s: Stream, data: JsonNode) =
+  packString(s, $data)
+
+proc unpackJSON(s: Stream): JsonNode =
+  return json.parseJson(unpackString(s))

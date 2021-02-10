@@ -23,9 +23,9 @@ proc packVarint(s: Stream, num: int, maxBits: int = 32) =
     num = num shr 7
 
     if num > 0:
-      struct.pack(s, '>', 'B', (b or 0x80))
+      struct.packUByte(s, uint8(b or 0x80))
     else:
-      struct.pack(s, '>', 'B', (b or 0))
+      struct.packUByte(s, uint8(b or 0))
 
     if num == 0:
       break

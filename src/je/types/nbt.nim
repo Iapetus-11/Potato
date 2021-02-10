@@ -1,3 +1,6 @@
+import streams
+
+import ../../struct
 
 type
   TAG = ref object of RootObj
@@ -42,3 +45,9 @@ type
 
   TAG_Long_Array = ref object of TAG
     data: seq[int64]
+
+proc packID(s: Stream, t: TAG) =
+  s.pack(t.id)
+
+proc unpackID(s: Stream): int8 =
+  return s.unpackByte()

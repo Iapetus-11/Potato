@@ -1,6 +1,6 @@
 import streams
 
-proc decodeMUTF8(s: string): string =
+proc decodeMUTF8*(s: string): string =
   let stringStream: StringStream = newStringStream(s)
   let length: int = len(s)
 

@@ -55,78 +55,68 @@ proc endianize(q: uint64, endian: char): uint64 =
   else:
     littleEndian64(addr result, addr q)
 
-proc resetPos(s: Stream, pos: int) =
-  if pos != -1:
-    s.setPosition(pos)
-
-proc pack*(s: Stream, endianness: char = '>', fmt: char, data: structData, writeToEnd: bool = true): void {.discardable.} =
-  if endianness != '>' and endianness != '<':
-    raise newException(ValueError, "Invalid endianness: " & endianness)
-
-  var resetPosTo: int = -1
-
-  if writeToEnd:
-    resetPosTo = s.getPosition()
-    s.setPosition(len(s.readAll()))
-
-  defer: resetPos(s, resetPosTo)
-
-  if fmt == '?':
-    s.write(bool(data))
-  elif fmt == 'b':
-    s.write(int8(data))
-  elif fmt == 'B':
-    s.write(uint8(data))
-  elif fmt == '?':
-    s.write(bool(data))
-  elif fmt == 'h':
-    s.write(endianize(int16(data), endianness))
-  elif fmt == 'H':
-    s.write(endianize(uint16(data), endianness))
-  elif fmt == 'i':
-    s.write(endianize(int32(data), endianness))
-  elif fmt == 'I':
-    s.write(endianize(uint32(data), endianness))
-  elif fmt == 'q':
-    s.write(endianize(int64(data), endianness))
-  elif fmt == 'Q':
-    s.write(endianize(uint64(data), endianness))
-  elif fmt == 'f':
-    s.write((float32(data)))
-  elif fmt == 'd':
-    s.write((float64(data)))
-  else:
-    raise newException(ValueError, "Invalid format: " & fmt)
+proc packBool*(s: Stream, data: bool, endianness: char = '>') =
+  s.write(data)
 
 proc unpackBool*(s: Stream, endianness: char = '>'): bool =
   return bool(s.readInt8())
 
+proc packByte*(s: Stream, data: int8, endianness: char = '>') =
+  s.write(data)
+
 proc unpackByte*(s: Stream, endianness: char = '>'): int8 =
   return s.readInt8()
+
+proc packUByte*(s: Stream, data: uint8, endianness: char = '>') =
+  s.write(data)
 
 proc unpackUByte*(s: Stream, endianness: char = '>'): uint8 =
   return s.readUint8()
 
+proc packShort*(s: Stream, data: int16, endianness: char = '>') =
+  s.write(data)
+
 proc unpackShort*(s: Stream, endianness: char = '>'): int16 =
   return endianize(s.readInt16(), endianness)
+
+proc packUShort*(s: Stream, data: uint16, endianness: char = '>') =
+  s.write(data)
 
 proc unpackUShort*(s: Stream, endianness: char = '>'): uint16 =
   return endianize(s.readUint16(), endianness)
 
+proc packInt*(s: Stream, data: int32, endianness: char = '>') =
+  s.write(data)
+
 proc unpackInt*(s: Stream, endianness: char = '>'): int32 =
   return endianize(s.readInt32(), endianness)
+
+proc packUInt*(s: Stream, data: uint32, endianness: char = '>') =
+  s.write(data)
 
 proc unpackUInt*(s: Stream, endianness: char = '>'): uint32 =
   return endianize(s.readUint32(), endianness)
 
+proc packLong*(s: Stream, data: int64, endianness: char = '>') =
+  s.write(data)
+
 proc unpackLong*(s: Stream, endianness: char = '>'): int64 =
   return endianize(s.readInt64(), endianness)
+
+proc packULong*(s: Stream, data: uint64, endianness: char = '>') =
+  s.write(data)
 
 proc unpackULong*(s: Stream, endianness: char = '>'): uint64 =
   return endianize(s.readUint64(), endianness)
 
+proc packFloat*(s: Stream, data: float32, endianness: char = '>') =
+  s.write(data)
+
 proc unpackFloat*(s: Stream, endianness: char = '>'): float32 =
   return s.readFloat32()
+
+proc packDouble*(s: Stream, data: float64, endianness: char = '>') =
+  s.write(data)
 
 proc unpackDouble*(s: Stream, endianness: char = '>'): float64 =
   return s.readFloat64()

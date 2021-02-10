@@ -10,7 +10,7 @@ struct.packInt(s, 123, '<')
 struct.packFloat(s, 12.1)
 struct.packLong(s, 120000000)
 
-echo s.getPosition()
+s.setPosition(0)
 
 echo struct.unpackUByte(s)
 echo struct.unpackInt(s, '<')

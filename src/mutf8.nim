@@ -18,10 +18,10 @@ proc decodeMUTF8(s: string): string =
     if x == 0:
       raise newException(ValueError, "Embedded null byte in input.")
 
-    if (x and 0b10000000) == 0b00000000: # ASCII
+    if (x and 0b10000000) == 0b00000000:  # ASCII
       x = x and 0x7F
       i += 1
-    elif (x and 0b11100000) == 0b11000000: # 2 byte codepoint
+    elif (x and 0b11100000) == 0b11000000:  # 2 byte codepoint
       if i + 1 >= length:
         raise newException(ValueError, "2-byte codepoint started, but too short to finish.")
 
@@ -37,3 +37,18 @@ proc decodeMUTF8(s: string): string =
         int((bytes[i+4] and 0b00001111) shl 0x06) or
         int(bytes[i+5] and 0b00111111)
       )
+
+      i += 6
+    elif (x shr 4) == 0b1110:  # 3 byte codepoint
+      if i + 2 >= length:
+        raise newException(ValueError, "3-byte codepoint started, but too short to finish.")
+
+      x = (
+        (bytes[i] and 0b00001111) shl 0x0C or
+        (bytes[i + 1] and 0b00111111) shl 0x06 or
+        (bytes[i + 2] and 0b00111111)
+      )
+
+      i += 3
+
+    result &= char(x)

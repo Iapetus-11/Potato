@@ -5,7 +5,7 @@ import json
 
 import ../struct
 
-proc packVarInt(s: Stream, num: int, maxBits: int = 32) =
+proc packVarint(s: Stream, num: int, maxBits: int = 32) =
   let numMin = (-1 shl (maxBits - 1))
   let numMax = (1 shl (maxBits - 1))
 
@@ -30,7 +30,7 @@ proc packVarInt(s: Stream, num: int, maxBits: int = 32) =
     if num == 0:
       break
 
-proc unpackVarInt(s: Stream, maxBits: int = 32): int =
+proc unpackVarint(s: Stream, maxBits: int = 32): int =
   var num: int = 0
   var b: int
 
@@ -55,11 +55,11 @@ proc unpackVarInt(s: Stream, maxBits: int = 32): int =
 proc packString(s: Stream, text: string) =
   let text: string = encodings.convert(text, "UTF-8", encodings.getCurrentEncoding())
 
-  packVarInt(s, len(text))
+  packVarint(s, len(text))
   s.write(text)
 
 proc unpackString(s: Stream): string =
-  let length: int = unpackVarInt(s)
+  let length: int = unpackVarint(s)
 
   for _ in countup(0, length):
     result &= s.readChar()

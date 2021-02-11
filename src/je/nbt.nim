@@ -78,6 +78,7 @@ proc tagRef(id: int8): type =
     else:
       raise newException(ValueError, "Invalid id: " & $id)
 
+
 proc packID(s: Stream, t: TAG) =
   struct.packByte(s, t.id)
 
@@ -100,6 +101,33 @@ proc pack(s: Stream, t: TAG) =
 
 proc unpack(s: Stream): TAG =
   let id: int8 = unpackID(s)
-  let tagType: type = tagRef(id)
 
-  # return tagType(id: id, name: unpackName(s), data: unpackContent(s, id))
+  case id:
+    of 0:
+      return TAG_End(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 1:
+      return TAG_Byte(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 2:
+      return TAG_Short(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 3:
+      return TAG_Int(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 4:
+      return TAG_Long(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 5:
+      return TAG_Float(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 6:
+      return TAG_Double(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 7:
+      return TAG_Byte_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 8:
+      return TAG_String(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 9:
+      return TAG_List(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 10:
+      return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 11:
+      return TAG_Int_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 12:
+      return TAG_Long_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+    else:
+      raise newException(ValueError, "Invalid id: " & $id)

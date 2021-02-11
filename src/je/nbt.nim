@@ -47,6 +47,37 @@ type
   TAG_Long_Array* = ref object of TAG
     data: seq[int64]
 
+proc tagRef(id: int): ref =
+  case id:
+    of 0:
+      return ref TAG_End
+    of 1:
+      return ref TAG_Byte
+    of 2:
+      return ref TAG_Short
+    of 3:
+      return ref TAG_Int
+    of 4:
+      return ref TAG_Long
+    of 5:
+      return ref TAG_Float
+    of 6:
+      return ref TAG_Double
+    of 7:
+      return ref TAG_Byte_Array
+    of 8:
+      return ref TAG_String
+    of 9:
+      return ref TAG_List
+    of 10:
+      return ref TAG_Compound
+    of 11:
+      return ref TAG_Int_Array
+    of 12:
+      return ref TAG_Long_Array
+    else:
+      raise newException(ValueError, "Invalid id: " & id)
+
 proc packID(s: Stream, t: TAG) =
   struct.packByte(s, t.id)
 

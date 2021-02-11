@@ -99,5 +99,7 @@ proc pack(s: Stream, t: TAG) =
   packContent(s, t)
 
 proc unpack(s: Stream): TAG =
-  echo "bruh"
-  return TAG(id: -1, name: "someTag")
+  let id = unpackID(s)
+  let tagType: TAG = tagRef(id)
+
+  return tagType(id: id, name: unpackName(s), data: unpackContent(s, id))

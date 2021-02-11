@@ -1,7 +1,7 @@
 import streams
 
-import ../../struct
-import ../../mutf8
+import ../struct
+import ../mutf8
 
 type
   TAG* = ref object of RootObj
@@ -61,3 +61,12 @@ proc packName(s: Stream, name: string) =
 
 proc unpackName(s: Stream): string =
   return mutf8.decodeMUTF8(s.readStr(int(struct.unpackUShort(s))))
+
+proc pack(s: Stream, t: TAG) =
+  packID(s, t)
+  packName(s, t)
+  packContent(s, t)
+
+proc unpack(s: Stream): TAG =
+  echo "bruh"
+  return TAG(id: -1, name: "someTag")

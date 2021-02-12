@@ -30,7 +30,7 @@ type
     data: float64
 
   TAG_Byte_Array* = ref object of TAG
-    data: openarray[int8]
+    data: seq[int8]
 
   TAG_String* = ref object of TAG
     data: string
@@ -47,7 +47,7 @@ type
   TAG_Long_Array* = ref object of TAG
     data: seq[int64]
 
-proc tagRef(id: int8): type =
+proc getTagByID[T](id: int8) =
   case id:
     of 0:
       return TAG_End
@@ -75,9 +75,6 @@ proc tagRef(id: int8): type =
       return TAG_Int_Array
     of 12:
       return TAG_Long_Array
-    else:
-      raise newException(ValueError, "Invalid id: " & $id)
-
 
 proc packID(s: Stream, t: TAG) =
   struct.packByte(s, t.id)
@@ -127,16 +124,16 @@ proc unpack(s: Stream): TAG =
       return TAG_Byte_Array(id: id, name: unpackName(s), data: byteArray)
     of 8:
       return TAG_String(id: id, name: unpackName(s), data: mutf8.decodeMUTF8(s.readStr(int(struct.unpackUShort(s)))))
-    of 9:
-      let typeID = struct.unpackByte(s)
-      let length = struct.unpackInt(s)
-      var list: seq[int8] = @[]
-      return TAG_List(id: id, name: unpackName(s), data: unpackContent(s, id))
-    of 10:
-      return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
-    of 11:
-      return TAG_Int_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
-    of 12:
-      return TAG_Long_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+    # of 9:
+    #   type tagType = getTagByID(struct.unpackByte(s))
+    #   let length = struct.unpackInt(s)
+    #   var list: seq[int8] = @[]
+    #   return TAG_List(id: id, name: unpackName(s), data: unpackContent(s, id))
+    # of 10:
+    #   return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
+    # of 11:
+    #   return TAG_Int_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+    # of 12:
+    #   return TAG_Long_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
     else:
       raise newException(ValueError, "Invalid id: " & $id)

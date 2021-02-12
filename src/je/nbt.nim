@@ -30,7 +30,7 @@ type
     data: float64
 
   TAG_Byte_Array* = ref object of TAG
-    data: openArray[int8]
+    data: openarray[int8]
 
   TAG_String* = ref object of TAG
     data: string
@@ -104,23 +104,29 @@ proc unpack(s: Stream): TAG =
 
   case id:
     of 0:
-      return TAG_End(id: id, name: unpackName(s), data: unpackContent(s, id))
+      return TAG_End(id: id, name: unpackName(s))
     of 1:
-      return TAG_Byte(id: id, name: unpackName(s), data: unpackContent(s, id))
+      return TAG_Byte(id: id, name: unpackName(s), data: struct.unpackByte(s))
     of 2:
-      return TAG_Short(id: id, name: unpackName(s), data: unpackContent(s, id))
+      return TAG_Short(id: id, name: unpackName(s), data: struct.unpackShort(s))
     of 3:
-      return TAG_Int(id: id, name: unpackName(s), data: unpackContent(s, id))
+      return TAG_Int(id: id, name: unpackName(s), data: struct.unpackInt(s))
     of 4:
-      return TAG_Long(id: id, name: unpackName(s), data: unpackContent(s, id))
+      return TAG_Long(id: id, name: unpackName(s), data: struct.unpackLong(s))
     of 5:
-      return TAG_Float(id: id, name: unpackName(s), data: unpackContent(s, id))
+      return TAG_Float(id: id, name: unpackName(s), data: struct.unpackFloat(s))
     of 6:
-      return TAG_Double(id: id, name: unpackName(s), data: unpackContent(s, id))
+      return TAG_Double(id: id, name: unpackName(s), data: struct.unpackDouble(s))
     of 7:
-      return TAG_Byte_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+      let length: int32 = struct.unpackInt(s)
+      var byteArray: seq[int8]
+
+      for _ in countup(0, length):
+        byteArray.add(struct.unpackByte(s))
+
+      return TAG_Byte_Array(id: id, name: unpackName(s), data: byteArray)
     of 8:
-      return TAG_String(id: id, name: unpackName(s), data: unpackContent(s, id))
+      return TAG_String(id: id, name: unpackName(s), data: mutf8.decodeMUTF8(s.readStr(int(struct.unpackUShort(s)))))
     of 9:
       return TAG_List(id: id, name: unpackName(s), data: unpackContent(s, id))
     of 10:

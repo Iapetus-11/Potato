@@ -47,36 +47,20 @@ type
   TAG_Long_Array* = ref object of TAG
     data: seq[int64]
 
-proc getTagByID(id: int8): ref TAG =
-  case id:
-    of 0:
-      return ref TAG_End
-    of 1:
-      return TAG_Byte
-    of 2:
-      return TAG_Short
-    of 3:
-      return TAG_Int
-    of 4:
-      return TAG_Long
-    of 5:
-      return TAG_Float
-    of 6:
-      return TAG_Double
-    of 7:
-      return TAG_Byte_Array
-    of 8:
-      return TAG_String
-    of 9:
-      return TAG_List
-    of 10:
-      return TAG_Compound
-    of 11:
-      return TAG_Int_Array
-    of 12:
-      return TAG_Long_Array
-    else:
-      raise newException(ValueError, "Invalid tag ID")
+  TagTypes = enum
+    tag_end = 0,
+    tag_byte = 1,
+    tag_short = 2,
+    tag_int = 3,
+    tag_long = 4,
+    tag_float = 5,
+    tag_double = 6,
+    tag_byte_array = 7,
+    tag_string = 8,
+    tag_list = 9,
+    tag_compound = 10,
+    tag_int_array = 11,
+    tag_long_array = 12
 
 proc packID(s: Stream, t: TAG) =
   struct.packByte(s, t.id)
@@ -126,16 +110,13 @@ proc unpack(s: Stream): TAG =
       return TAG_Byte_Array(id: id, name: unpackName(s), data: byteArray)
     of 8:
       return TAG_String(id: id, name: unpackName(s), data: mutf8.decodeMUTF8(s.readStr(int(struct.unpackUShort(s)))))
-    of 9:
-      let tagType = getTagByID(struct.unpackByte(s))
-      let length = struct.unpackInt(s)
-      var list: seq[int8] = @[]
-      return TAG_List(id: id, name: unpackName(s), data: unpackContent(s, id))
-    of 10:
-      return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
-    of 11:
-      return TAG_Int_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
-    of 12:
-      return TAG_Long_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+    # of 9:
+    #   return TAG_List(id: id, name: unpackName(s), data: unpackContent(s, id))
+    # of 10:
+    #   return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
+    # of 11:
+    #   return TAG_Int_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+    # of 12:
+    #   return TAG_Long_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
     else:
       raise newException(ValueError, "Invalid id: " & $id)

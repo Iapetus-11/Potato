@@ -110,8 +110,10 @@ proc unpack(s: Stream): TAG =
       return TAG_Byte_Array(id: id, name: unpackName(s), data: byteArray)
     of 8:
       return TAG_String(id: id, name: unpackName(s), data: mutf8.decodeMUTF8(s.readStr(int(struct.unpackUShort(s)))))
-    # of 9:
-    #   return TAG_List(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 9:
+      let typeID: int8 = struct.unpackByte(s)
+      let length: int32 = struct.unpackInt(s)
+      # return TAG_List(id: id, name: unpackName(s), data: unpackContent(s, id))
     # of 10:
     #   return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
     # of 11:

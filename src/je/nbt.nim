@@ -99,13 +99,14 @@ proc unpack(s: Stream, id: int8): TAG =
     of 6:
       return TAG_Double(id: id, name: unpackName(s), data: struct.unpackDouble(s))
     of 7:
+      let name: string = unpackName(s)
       let length: int32 = struct.unpackInt(s)
       var byteArray: seq[int8]
 
       for _ in countup(0, length):
         byteArray.add(struct.unpackByte(s))
 
-      return TAG_Byte_Array(id: id, name: unpackName(s), data: byteArray)
+      return TAG_Byte_Array(id: id, name: name, data: byteArray)
     of 8:
       return TAG_String(id: id, name: unpackName(s), data: mutf8.decodeMUTF8(s.readStr(int(struct.unpackUShort(s)))))
     of 9:

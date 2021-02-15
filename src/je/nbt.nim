@@ -111,7 +111,12 @@ proc unpack(s: Stream, id: int8): TAG =
     of 9:
       let typeID: int8 = struct.unpackByte(s)
       let length: int32 = struct.unpackInt(s)
-      # return TAG_List(id: id, name: unpackName(s), data: unpackContent(s, id))
+      result = TAG_List(id: id, name: unpackName(s), data: @[])
+
+      for _ in countup(0, length):
+        result.data.add(unpack(s, typeID))
+
+      return result
     # of 10:
     #   return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
     # of 11:

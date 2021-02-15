@@ -110,14 +110,15 @@ proc unpack(s: Stream, id: int8): TAG =
     of 8:
       return TAG_String(id: id, name: unpackName(s), data: mutf8.decodeMUTF8(s.readStr(int(struct.unpackUShort(s)))))
     of 9:
+      let name: string = unpackName(s)
       let typeID: int8 = struct.unpackByte(s)
       let length: int32 = struct.unpackInt(s)
-      result = TAG_List(id: id, name: unpackName(s), data: @[])
+      var tags: seq[TAG] = @[]
 
       for _ in countup(0, length):
-        result.data.add(unpack(s, typeID))
+        tags.add(unpack(s, typeID))
 
-      return result
+      return TAG_List(id: id, name: name, data: tags)
     # of 10:
     #   return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
     # of 11:

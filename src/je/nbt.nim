@@ -82,9 +82,7 @@ proc pack(s: Stream, t: TAG) =
   # packName(s, t)
   # packContent(s, t)
 
-proc unpack(s: Stream): TAG =
-  let id: int8 = unpackID(s)
-
+proc unpack(s: Stream, id: int8): TAG =
   case id:
     of 0:
       return TAG_End(id: id, name: unpackName(s))
@@ -122,3 +120,6 @@ proc unpack(s: Stream): TAG =
     #   return TAG_Long_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
     else:
       raise newException(ValueError, "Invalid id: " & $id)
+
+proc unpack(s: Stream): TAG =
+    return unpack(s, unpackID(s))

@@ -122,7 +122,14 @@ proc unpack(s: Stream, id: int8, name: string): TAG =
     # of 10:
     #   return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
     of 11:
-      return TAG_Int_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+      let name: string = unpackName(s)
+      let length: int32 = struct.unpackInt(s)
+      var intArray: seq[int32]
+
+      for _ in countup(0, length):
+        intArray.add(struct.unpackInt(s))
+
+      return TAG_Int_Array(id: id, name: name, data: intArray)
     # of 12:
     #   return TAG_Long_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
     else:

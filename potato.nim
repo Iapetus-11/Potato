@@ -5,10 +5,14 @@ import src/je/structext
 import src/struct
 import src/mutf8
 
+var fs: FileStream = newFileStream("bigtest.nbt")
+
+echo nbt.unpack(fs)
+
 # Test MUTF8 utils
-let myString: string = "Hello WorldȀȀ∃𠀋"
-echo mutf8.encodeMUTF8(myString)
-echo mutf8.decodeMUTF8(mutf8.encodeMUTF8(myString))
+# let myString: string = "Hello WorldȀȀ∃𠀋"
+# echo mutf8.encodeMUTF8(myString)
+# echo mutf8.decodeMUTF8(mutf8.encodeMUTF8(myString))
 
 # var s: Stream = newStringStream()
 #

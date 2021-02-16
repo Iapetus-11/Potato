@@ -47,20 +47,20 @@ type
   TAG_Long_Array* = ref object of TAG
     data: seq[int64]
 
-  TagIDs = enum
-    tag_end = 0,
-    tag_byte = 1,
-    tag_short = 2,
-    tag_int = 3,
-    tag_long = 4,
-    tag_float = 5,
-    tag_double = 6,
-    tag_byte_array = 7,
-    tag_string = 8,
-    tag_list = 9,
-    tag_compound = 10,
-    tag_int_array = 11,
-    tag_long_array = 12
+  # TagIDs = enum
+  #   tag_end = 0,
+  #   tag_byte = 1,
+  #   tag_short = 2,
+  #   tag_int = 3,
+  #   tag_long = 4,
+  #   tag_float = 5,
+  #   tag_double = 6,
+  #   tag_byte_array = 7,
+  #   tag_string = 8,
+  #   tag_list = 9,
+  #   tag_compound = 10,
+  #   tag_int_array = 11,
+  #   tag_long_array = 12
 
 proc packID(s: Stream, t: TAG) =
   struct.packByte(s, t.id)

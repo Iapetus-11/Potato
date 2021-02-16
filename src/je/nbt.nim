@@ -77,13 +77,13 @@ proc packName(s: Stream, t: TAG) =
 proc unpackName(s: Stream): string =
   return mutf8.decodeMUTF8(s.readStr(int(struct.unpackUShort(s))))
 
-proc pack(s: Stream, t: TAG) =
+proc pack*(s: Stream, t: TAG) =
   packID(s, t)
   # packName(s, t)
   packName(s, t)
   # packContent(s, t)
 
-proc unpack(s: Stream, id: int8, name: string): TAG =
+proc unpack*(s: Stream, id: int8, name: string): TAG =
   case id:
     of 0:
       return TAG_End(id: id, name: name)
@@ -149,5 +149,5 @@ proc unpack(s: Stream, id: int8, name: string): TAG =
     else:
       raise newException(ValueError, "Invalid id: " & $id)
 
-proc unpack(s: Stream): TAG =
+proc unpack*(s: Stream): TAG =
     return unpack(s, unpackID(s), unpackName(s))

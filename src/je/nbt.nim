@@ -68,8 +68,8 @@ proc packID(s: Stream, t: TAG) =
 proc unpackID(s: Stream): int8 =
   return struct.unpackByte(s)
 
-proc packName(s: Stream, name: string) =
-  let name: string = mutf8.encodeMUTF8(name)
+proc packName(s: Stream, t: TAG) =
+  let name: string = mutf8.encodeMUTF8(t.name)
 
   struct.packUShort(s, uint16(len(name)))
   s.write(name)

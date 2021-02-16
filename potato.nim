@@ -7,7 +7,7 @@ import src/mutf8
 
 var fs: FileStream = newFileStream("bigtest.nbt")
 
-echo nbt.unpack(fs)
+let t: TAG = nbt.unpack(fs)
 
 # Test MUTF8 utils
 # let myString: string = "Hello WorldȀȀ∃𠀋"

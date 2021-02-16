@@ -47,7 +47,7 @@ type
   TAG_Long_Array* = ref object of TAG
     data: seq[int64]
 
-  TagTypes = enum
+  TagIDs = enum
     tag_end = 0,
     tag_byte = 1,
     tag_short = 2,
@@ -82,22 +82,22 @@ proc pack(s: Stream, t: TAG) =
   # packName(s, t)
   # packContent(s, t)
 
-proc unpack(s: Stream, id: int8): TAG =
+proc unpack(s: Stream, id: int8, name: string): TAG =
   case id:
     of 0:
-      return TAG_End(id: id, name: unpackName(s))
+      return TAG_End(id: id, name: name)
     of 1:
-      return TAG_Byte(id: id, name: unpackName(s), data: struct.unpackByte(s))
+      return TAG_Byte(id: id, name: name, data: struct.unpackByte(s))
     of 2:
-      return TAG_Short(id: id, name: unpackName(s), data: struct.unpackShort(s))
+      return TAG_Short(id: id, name: name, data: struct.unpackShort(s))
     of 3:
-      return TAG_Int(id: id, name: unpackName(s), data: struct.unpackInt(s))
+      return TAG_Int(id: id, name: name, data: struct.unpackInt(s))
     of 4:
-      return TAG_Long(id: id, name: unpackName(s), data: struct.unpackLong(s))
+      return TAG_Long(id: id, name: name, data: struct.unpackLong(s))
     of 5:
-      return TAG_Float(id: id, name: unpackName(s), data: struct.unpackFloat(s))
+      return TAG_Float(id: id, name: name, data: struct.unpackFloat(s))
     of 6:
-      return TAG_Double(id: id, name: unpackName(s), data: struct.unpackDouble(s))
+      return TAG_Double(id: id, name: name, data: struct.unpackDouble(s))
     of 7:
       let name: string = unpackName(s)
       let length: int32 = struct.unpackInt(s)
@@ -116,17 +116,17 @@ proc unpack(s: Stream, id: int8): TAG =
       var tags: seq[TAG] = @[]
 
       for _ in countup(0, length):
-        tags.add(unpack(s, typeID))
+        tags.add(unpack(s, typeID, ""))
 
       return TAG_List(id: id, name: name, data: tags)
     # of 10:
     #   return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
-    # of 11:
-    #   return TAG_Int_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 11:
+      return TAG_Int_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
     # of 12:
     #   return TAG_Long_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
     else:
       raise newException(ValueError, "Invalid id: " & $id)
 
 proc unpack(s: Stream): TAG =
-    return unpack(s, unpackID(s))
+    return unpack(s, unpackID(s), unpackName(s))

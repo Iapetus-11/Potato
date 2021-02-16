@@ -130,8 +130,15 @@ proc unpack(s: Stream, id: int8, name: string): TAG =
         intArray.add(struct.unpackInt(s))
 
       return TAG_Int_Array(id: id, name: name, data: intArray)
-    # of 12:
-    #   return TAG_Long_Array(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 12:
+      let name: string = unpackName(s)
+      let length: int32 = struct.unpackInt(s)
+      var longArray: seq[int64]
+
+      for _ in countup(0, length):
+        longArray.add(struct.unpackLong(s))
+
+      return TAG_Long_Array(id: id, name: name, data: longArray)
     else:
       raise newException(ValueError, "Invalid id: " & $id)
 

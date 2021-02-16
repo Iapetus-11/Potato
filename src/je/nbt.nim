@@ -80,6 +80,7 @@ proc unpackName(s: Stream): string =
 proc pack(s: Stream, t: TAG) =
   packID(s, t)
   # packName(s, t)
+  packName(s, t)
   # packContent(s, t)
 
 proc unpack(s: Stream, id: int8, name: string): TAG =

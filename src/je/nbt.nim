@@ -124,11 +124,10 @@ proc unpack(s: Stream, id: int8, name: string): TAG =
       let name: string = unpackName(s)
       var tags: seq[TAG] = @[]
 
-      var tagID: int8
-      var tagName: string
-
       while tags[^1].id != 0:
         tags.add(unpack(s, unpackID(s), unpackName(s)))
+
+      return TAG_Compound(id: id, name: name, data: tags)
     of 11:
       let name: string = unpackName(s)
       let length: int32 = struct.unpackInt(s)

@@ -119,8 +119,15 @@ proc unpack(s: Stream, id: int8, name: string): TAG =
         tags.add(unpack(s, typeID, ""))
 
       return TAG_List(id: id, name: name, data: tags)
-    # of 10:
-    #   return TAG_Compound(id: id, name: unpackName(s), data: unpackContent(s, id))
+    of 10:
+      let name: string = unpackName(s)
+      var tags: seq[TAG] = @[]
+
+      var tagID: int8
+      var tagName: string
+
+      while tags[^1].id != 0:
+        tags.add(unpack(s, unpackID(s), unpackName(s)))
     of 11:
       let name: string = unpackName(s)
       let length: int32 = struct.unpackInt(s)

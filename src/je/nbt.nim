@@ -39,7 +39,7 @@ type
     data: seq
 
   TAG_Compound* = ref object of TAG
-    data: seq[ptr]
+    data: seq[TAG]
 
   TAG_Int_Array* = ref object of TAG
     data: seq[int32]
